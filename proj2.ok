@@ -1,0 +1,17 @@
+{
+  "name": "Yelp Maps",
+  "endpoint": "none",
+  "src": [
+    "utils.py",
+    "abstractions.py",
+    "recommend.py"
+  ],
+  "tests": {
+      "tests/0[0-9].py": "ok_test",
+      "tests/10.py": "ok_test"
+  },
+  "protocols": [
+      "unlock",
+      "grading"
+  ]
+}
