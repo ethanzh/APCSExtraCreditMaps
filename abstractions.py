@@ -71,6 +71,7 @@ def make_restaurant(name, location, categories, price, reviews):
         'location': location,
         'categories': categories,
         'price': price,
+        'reviews': reviews
     }
 
 def restaurant_name(restaurant):
@@ -94,7 +95,7 @@ def restaurant_ratings(restaurant):
     """Return a list of ratings, which are numbers from 1 to 5, of the
     `restaurant` based on the reviews of the `restaurant`."""
     # BEGIN Question 1
-    "*** REPLACE THIS LINE ***"
+    return [review_rating(i) for i in restaurant['reviews']]
     # END Question 1
 
 
