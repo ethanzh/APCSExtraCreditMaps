@@ -64,15 +64,15 @@ def make_restaurant(name, location, categories, price, reviews):
     # You may change this starter implementation however you wish, including
     # adding more items to the dictionary below.
     # BEGIN Question 1
-    "*** REPLACE THIS LINE ***"
     # END Question 1
     return {
         'name': name,
         'location': location,
         'categories': categories,
         'price': price,
-        'reviews': reviews
+        'reviews': reviews #added this. Adds a diciontary entry that maps 'reviews' to the reviews for a given restaurant
     }
+    # END Question 1
 
 def restaurant_name(restaurant):
     """Return the name of the `restaurant`, which is a string."""
@@ -104,11 +104,11 @@ def restaurant_ratings(restaurant):
 def restaurant_num_ratings(restaurant):
     """Return the number of ratings for `restaurant`."""
     # BEGIN Question 2
-    "*** REPLACE THIS LINE ***"
+    return len(restaurant_ratings(restaurant)) #uses python built-in len function to count how many ratings a single restaurant has
     # END Question 2
 
 def restaurant_mean_rating(restaurant):
     """Return the average rating for `restaurant`."""
     # BEGIN Question 2
-    "*** REPLACE THIS LINE ***"
+    return mean(restaurant_ratings(restaurant)) #takes a list, uses built-in python function to get the average value
     # END Question 2
