@@ -12,6 +12,10 @@ from utils import mean
 def make_review(restaurant_name, rating):
     """Return a review data abstraction."""
     return [restaurant_name, rating]
+    ## A review consists of a list, with [0] being the name, and [1] being the rating. The two functions below
+    ## simply get these values from a 'review'
+
+    ## Review = [name, rating]
 
 def review_restaurant_name(review):
     """Return the restaurant name of the `review`, which is a string."""
@@ -95,7 +99,7 @@ def restaurant_ratings(restaurant):
     """Return a list of ratings, which are numbers from 1 to 5, of the
     `restaurant` based on the reviews of the `restaurant`."""
     # BEGIN Question 1
-    return [review_rating(i) for i in restaurant['reviews']]
+    return [review_rating(review) for review in restaurant['reviews']] #returns ratings (all numbers)
     # END Question 1
 
 

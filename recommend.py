@@ -8,20 +8,21 @@ from visualize import draw_map
 
 ##################################
 # Phase 2: Unsupervised Learning #
-##################################
+
 
 
 def find_closest(location, centroids):
-    """Return the centroid in `centroids` that is closest to `location`. If two
+    """Return the item in CENTROIDS that is closest to LOCATION. If two
     centroids are equally close, return the first one.
-
-    >>> find_closest([3.0, 4.0], [[0.0, 0.0], [2.0, 3.0], [4.0, 3.0], [5.0, 5.0]])
-    [2.0, 3.0]
+    >>> find_closest([3, 4], [[0, 0], [2, 3], [4, 3], [5, 5]])
+    [2, 3]
     """
-    # BEGIN Question 3
-    "*** REPLACE THIS LINE ***"
-    # END Question 3
+    return min(centroids, key = lambda x: distance(location, x))
+    # the lambda function takes each location in 'centroid', and gets its distance to the given 'location'. The built-in
+    # min function then simply goes through the list of all the distances, picks the shortest distace, and returns the
+    # point to which that distance corresponds.
 
+    # Note to self: https://docs.python.org/2/library/functions.html#min -eh
 
 def group_by_first(pairs):
     """Return a list of pairs that relates each unique key in [key, value]
@@ -41,6 +42,8 @@ def group_by_first(pairs):
     return [[y for x, y in pairs if x == key] for key in keys]
 
 
+
+
 def group_by_centroid(restaurants, centroids):
     """Return a list of clusters, where each cluster contains all restaurants
     nearest to a corresponding centroid in `centroids`. Each item in
@@ -48,7 +51,16 @@ def group_by_centroid(restaurants, centroids):
     restaurants closest to the same centroid.
     """
     # BEGIN Question 4
-    "*** REPLACE THIS LINE ***"
+
+    lyst = [] #starting list, will add on to it
+    for i in restaurants:
+        lyst.append([find_closest(restaurant_location(i), centroids), i])
+    return group_by_first(lyst)
+
+    # Starts with an empty list. Goes through every restaurant, gets its location, and then uses find_closest to group
+    # locations intro centroids. Group_by_first uses key value pairs to sort the locations by centroid
+
+
     # END Question 4
 
 
@@ -56,7 +68,23 @@ def find_centroid(cluster):
     """Return the centroid of the `cluster` based on the locations of the
     restaurants."""
     # BEGIN Question 5
-    "*** REPLACE THIS LINE ***"
+
+    def get_lats(cluster):
+        return [restaurant_location(item)[0] for item in cluster]
+
+    def get_longs(cluster):
+        return [restaurant_location(item)[1] for item in cluster]
+
+
+    # Goes through list of all restaurants in a cluster, and seperates them into all the latitudes, and all the longitutes
+    # Then finds the average lat, and average long
+
+    avg_lat = mean(get_lats(cluster))
+    avg_long = mean(get_longs(cluster))
+
+    return [avg_lat, avg_long]
+    # These are the co-ords of a centroid's cluster
+
     # END Question 5
 
 
