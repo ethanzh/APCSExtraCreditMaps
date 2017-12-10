@@ -89,18 +89,29 @@ def find_centroid(cluster):
 
 
 def k_means(restaurants, k, max_updates=100):
-    """Use k-means to group `restaurants` by location into `k` clusters."""
+    """Use k-means to group restaurants by location into k clusters."""
     assert len(restaurants) >= k, 'Not enough restaurants to cluster'
-    old_centroids, n = [], 0
-    # Select initial centroids randomly by choosing k different restaurants
-    centroids = [restaurant_location(r) for r in sample(restaurants, k)]
+    # if theres too few restaurants it's not possible to create a cluster
 
-    while old_centroids != centroids and n < max_updates:
+    old_centroids, n = [], 0
+    # starting centroids come from a random # of restaurants
+    centroids = [restaurant_location(r) for r in sample(restaurants, k)]
+    # sample gets a random # of restaurants
+
+    while old_centroids != centroids and n < max_updates: #keeps the number of iterations under 100, makes sure the old and new centroids differ
         old_centroids = centroids
         # BEGIN Question 6
-        "*** REPLACE THIS LINE ***"
+
+        centroids = []
+        for centroid in group_by_centroid(restaurants, old_centroids):
+            centroids.append(find_centroid(centroid))
+
+            # goes through and groups the restaurants using the old centroid values. Goes and creates new centroid values, using the find_centroid function
+            ## NOTE: I struggled a long time with this problem, and had to have a friend who goes to Cal walk me through it -eh
+
         # END Question 6
         n += 1
+        #iterates the number of times this function has run
     return centroids
 
 
