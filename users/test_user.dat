@@ -26,5 +26,6 @@ make_user(
         make_review('Suya African Caribbean Grill', 4.0),
         make_review('Cafe Rio', 4.0),
         make_review('The Sunny Side Caf\u00e9', 1.5),
+        make_review('Chinese Express', 5.0),
     ]
 )
