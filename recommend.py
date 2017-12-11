@@ -132,8 +132,21 @@ def find_predictor(user, restaurants, feature_fn):
     ys = [reviews_by_user[restaurant_name(r)] for r in restaurants]
 
     # BEGIN Question 7
-    "*** REPLACE THIS LINE ***"
-    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION
+    xmean = mean(xs)
+    Sxx=0
+    for i in range(0,len(xs)-1):
+        Sxx += (xs[i] - xmean)*(xs[i] - xmean)
+
+    ymean = mean(ys)
+    Syy=0
+    for i in range(0,len(ys)-1):
+        Sxx += (ys[i] - ymean)*(ys[i] - ymean)
+
+    Sxy=0
+    for i in range(0,len(xs)-1):
+        Sxy += (xs[i] - xmean)*(ys[i] - ymean)
+
+    b, a, r_squared = Sxy/Sxx, ymean-b*xmean, (Sxy*Sxy)/(Sxx*Syy)
     # END Question 7
 
     def predictor(restaurant):
@@ -153,7 +166,18 @@ def best_predictor(user, restaurants, feature_fns):
     """
     reviewed = user_reviewed_restaurants(user, restaurants)
     # BEGIN Question 8
-    "*** REPLACE THIS LINE ***"
+    predictorlist = []
+    rsquaredlist = []
+    for i in range(0,len(feature_fns)-1):
+        func = feature_fns[i]
+        predictor, rsquared = find_predictor(user, reviewed, func)
+        predictorlist.append(predictor)
+        rsquaredlist.append(rsquared)
+    maxindex = max(rsquaredlist, key=rsquaredlist.get)
+    bestpred = predictorlist[maxindex]
+
+    return bestpred
+
     # END Question 8
 
 
@@ -169,7 +193,18 @@ def rate_all(user, restaurants, feature_fns):
     predictor = best_predictor(user, ALL_RESTAURANTS, feature_fns)
     reviewed = user_reviewed_restaurants(user, restaurants)
     # BEGIN Question 9
-    "*** REPLACE THIS LINE ***"
+    nameslist = []
+    ratingslist = []
+    for i in range(0,len(restaurants)-1):
+        restaurantname = restaurants[i].name
+        nameslist.append(restaurantname)
+        if (restaurantsname in user_reviewed_restaurants):
+            restaurantrating = user_reviewed_restaurants[restaurantname]
+        else:
+            restaurantrating = predictor(restaurantname) #???
+        ratingslist.append(restaurantrating)
+    ratingsdict = dict(zip(nameslist,ratingslist))
+    return ratingsdict
     # END Question 9
 
 
@@ -181,7 +216,12 @@ def search(query, restaurants):
     restaurants -- A sequence of restaurants
     """
     # BEGIN Question 10
-    "*** REPLACE THIS LINE ***"
+    preferredrestaurants = []
+    for i in range(0,len(restaurants)-1):
+        restaurant = restaurants[i]
+        if (restaurant_category == query):
+            preferredrestaurants.append(restaurant) #???
+    return preferredrestaurants
     # END Question 10
 
 
@@ -192,6 +232,10 @@ def feature_set():
             restaurant_num_ratings,
             lambda r: restaurant_location(r)[0],
             lambda r: restaurant_location(r)[1]]
+
+
+
+
 
 
 @main
