@@ -1,0 +1,32 @@
+How to use Yelp-Maps:
+
+cd to Yelp-Maps directory
+$ python3 recommend.py 
+
+Description:
+	This program takes a map of UC Berkeley and its surrounding area, and plots restaurants on the map.
+	It also provides ratings for each restaurant that are based off what the user has specified.
+	Restaurants are sorted into k-clusters, a variable that can be changed when the program is run.
+	Program must be run from the command line, as shown above.
+
+Options:
+	-u user
+		specifies a user's name, who has specific tastes/rating for certain restaurants
+	-k k-clusters
+		specifies the number of k clusters to group the restaurants into. Clusters are differentiated by color
+	-r list all restaurants
+		lists all the restaurants in the database
+		
+To create your own user:
+	Navigate to Yelp-Maps/users
+	Copy one of the .dat files and edit it to suit your preferences
+	
+	
+Authors:
+Ethan Houston, Ethan Shaotran
+
+Github:
+https://github.com/ethanzh/Yelp-Maps
+
+Project website:
+https://cs61a.org/proj/maps/

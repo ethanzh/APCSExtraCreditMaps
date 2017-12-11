@@ -1,0 +1,7 @@
+make_user(
+    'Positive Patty',      # name
+    [                   # reviews
+        
+        make_review('Planet Kebob & Cafe', 1.0)
+    ]
+)
