@@ -117,9 +117,8 @@ def k_means(restaurants, k, max_updates=100):
 
 def find_predictor(user, restaurants, feature_fn):
     """Return a rating predictor (a function from restaurants to ratings),
-    for `user` by performing least-squares linear regression using `feature_fn`
-    on the items in `restaurants`. Also, return the R^2 value of this model.
-
+    for USER by performing least-squares linear regression using FEATURE_FN
+    on the items in RESTAURANTS. Also, return the R^2 value of this model.
     Arguments:
     user -- A user
     restaurants -- A sequence of restaurants
@@ -131,23 +130,18 @@ def find_predictor(user, restaurants, feature_fn):
     xs = [feature_fn(r) for r in restaurants]
     ys = [reviews_by_user[restaurant_name(r)] for r in restaurants]
 
-    # BEGIN Question 7
-    xmean = mean(xs)
-    Sxx=0
-    for i in range(0,len(xs)-1):
-        Sxx += (xs[i] - xmean)*(xs[i] - xmean)
-
-    ymean = mean(ys)
-    Syy=0
-    for i in range(0,len(ys)-1):
-        Sxx += (ys[i] - ymean)*(ys[i] - ymean)
-
-    Sxy=0
-    for i in range(0,len(xs)-1):
-        Sxy += (xs[i] - xmean)*(ys[i] - ymean)
-
-    b, a, r_squared = Sxy/Sxx, ymean-b*xmean, (Sxy*Sxy)/(Sxx*Syy)
-    # END Question 7
+    "*** YOUR CODE HERE ***"
+    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION
+    sxx, syy, sxy = 0, 0, 0
+    for x in xs:
+        sxx += (x - mean(xs)) * (x - mean(xs))
+    for y in ys:
+        syy += (y - mean(ys)) * (y - mean(ys))
+    for i in range(len(xs)):
+        sxy += (xs[i] - mean(xs)) * (ys[i] - mean(ys))
+    b = sxy / sxx
+    a = mean(ys) - b * mean(xs)
+    r_squared = (sxy * sxy) / (sxx * syy)
 
     def predictor(restaurant):
         return b * feature_fn(restaurant) + a
@@ -156,73 +150,55 @@ def find_predictor(user, restaurants, feature_fn):
 
 
 def best_predictor(user, restaurants, feature_fns):
-    """Find the feature within `feature_fns` that gives the highest R^2 value
-    for predicting ratings by the `user`; return a predictor using that feature.
-
+    """Find the feature within FEATURE_FNS that gives the highest R^2 value
+    for predicting ratings by the user; return a predictor using that feature.
     Arguments:
     user -- A user
-    restaurants -- A list of restaurants
+    restaurants -- A dictionary from restaurant names to restaurants
     feature_fns -- A sequence of functions that each takes a restaurant
     """
-    reviewed = user_reviewed_restaurants(user, restaurants)
-    # BEGIN Question 8
-    predictorlist = []
-    rsquaredlist = []
-    for i in range(0,len(feature_fns)-1):
-        func = feature_fns[i]
-        predictor, rsquared = find_predictor(user, reviewed, func)
-        predictorlist.append(predictor)
-        rsquaredlist.append(rsquared)
-    maxindex = max(rsquaredlist, key=rsquaredlist.get)
-    bestpred = predictorlist[maxindex]
-
-    return bestpred
-
-    # END Question 8
+    reviewed = list(user_reviewed_restaurants(user, restaurants).values())
+    "*** YOUR CODE HERE ***"
+    result_li = []
+    for feature_fn in feature_fns:
+        result_li.append(find_predictor(user, reviewed, feature_fn))
+    return max(result_li, key=lambda result: result[1])[0]
 
 
-def rate_all(user, restaurants, feature_fns):
-    """Return the predicted ratings of `restaurants` by `user` using the best
-    predictor based a function from `feature_fns`.
-
+def rate_all(user, restaurants, feature_functions):
+    """Return the predicted ratings of RESTAURANTS by USER using the best
+    predictor based a function from FEATURE_FUNCTIONS.
     Arguments:
     user -- A user
-    restaurants -- A list of restaurants
-    feature_fns -- A sequence of feature functions
+    restaurants -- A dictionary from restaurant names to restaurants
     """
-    predictor = best_predictor(user, ALL_RESTAURANTS, feature_fns)
+    # Use the best predictor for the user, learned from *all* restaurants
+    # (Note: the name RESTAURANTS is bound to a dictionary of all restaurants)
+    predictor = best_predictor(user, restaurants, feature_functions)
+    "*** YOUR CODE HERE ***"
     reviewed = user_reviewed_restaurants(user, restaurants)
-    # BEGIN Question 9
-    nameslist = []
-    ratingslist = []
-    for i in range(0,len(restaurants)-1):
-        restaurantname = restaurants[i].name
-        nameslist.append(restaurantname)
-        if (restaurantsname in user_reviewed_restaurants):
-            restaurantrating = user_reviewed_restaurants[restaurantname]
+    result = {}
+    for r_name, r in restaurants.items():
+        if r_name in reviewed.keys():
+            result[r_name] = review_rating(user_reviews(user)[r_name])
         else:
-            restaurantrating = predictor(restaurantname) #???
-        ratingslist.append(restaurantrating)
-    ratingsdict = dict(zip(nameslist,ratingslist))
-    return ratingsdict
-    # END Question 9
+            result[r_name] = predictor(r)
+    return result
 
 
 def search(query, restaurants):
-    """Return each restaurant in `restaurants` that has `query` as a category.
-
+    """Return each restaurant in RESTAURANTS that has QUERY as a category.
     Arguments:
     query -- A string
     restaurants -- A sequence of restaurants
     """
-    # BEGIN Question 10
-    preferredrestaurants = []
-    for i in range(0,len(restaurants)-1):
-        restaurant = restaurants[i]
-        if (restaurant_category == query):
-            preferredrestaurants.append(restaurant) #???
-    return preferredrestaurants
-    # END Question 10
+    "*** YOUR CODE HERE ***"
+    result = []
+    for i in range(len(restaurants) - 1, -1, -1):
+        if query not in restaurant_categories(restaurants[i]):
+            restaurants.remove(restaurants[i])
+    return restaurants
+
 
 
 def feature_set():
