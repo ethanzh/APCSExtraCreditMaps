@@ -17,6 +17,8 @@ def find_closest(location, centroids):
     >>> find_closest([3, 4], [[0, 0], [2, 3], [4, 3], [5, 5]])
     [2, 3]
     """
+
+    "*** YOUR CODE HERE ***"
     return min(centroids, key = lambda x: distance(location, x))
     # the lambda function takes each location in 'centroid', and gets its distance to the given 'location'. The built-in
     # min function then simply goes through the list of all the distances, picks the shortest distace, and returns the
@@ -51,7 +53,7 @@ def group_by_centroid(restaurants, centroids):
     restaurants closest to the same centroid.
     """
     # BEGIN Question 4
-
+    "*** YOUR CODE HERE ***"
     lyst = [] #starting list, will add on to it
     for i in restaurants:
         lyst.append([find_closest(restaurant_location(i), centroids), i])
@@ -68,7 +70,7 @@ def find_centroid(cluster):
     """Return the centroid of the `cluster` based on the locations of the
     restaurants."""
     # BEGIN Question 5
-
+    "*** YOUR CODE HERE ***"
     def get_lats(cluster):
         return [restaurant_location(item)[0] for item in cluster]
 
@@ -131,7 +133,7 @@ def find_predictor(user, restaurants, feature_fn):
     ys = [reviews_by_user[restaurant_name(r)] for r in restaurants]
 
     "*** YOUR CODE HERE ***"
-    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION
+    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION, done below
     sxx, syy, sxy = 0, 0, 0
     for x in xs:
         sxx += (x - mean(xs)) * (x - mean(xs))
@@ -142,6 +144,9 @@ def find_predictor(user, restaurants, feature_fn):
     b = sxy / sxx
     a = mean(ys) - b * mean(xs)
     r_squared = (sxy * sxy) / (sxx * syy)
+
+    # These mathematical procedures were provided by the project website, there's no way we would have come up with this
+    # on our own
 
     def predictor(restaurant):
         return b * feature_fn(restaurant) + a
@@ -163,6 +168,7 @@ def best_predictor(user, restaurants, feature_fns):
     for feature_fn in feature_fns:
         result_li.append(find_predictor(user, reviewed, feature_fn))
     return max(result_li, key=lambda result: result[1])[0]
+    # Uses sample-code builtin functions to 'predict' ratings, using the R2 value from user's previous ratings
 
 
 def rate_all(user, restaurants, feature_functions):
@@ -184,6 +190,7 @@ def rate_all(user, restaurants, feature_functions):
         else:
             result[r_name] = predictor(r)
     return result
+    # creates a dictionary with the ratings predicted from the user for each restaurant
 
 
 def search(query, restaurants):
@@ -198,6 +205,7 @@ def search(query, restaurants):
         if query not in restaurant_categories(restaurants[i]):
             restaurants.remove(restaurants[i])
     return restaurants
+    # Goes through list of each restaurant, and sees if the user has queried it
 
 
 
