@@ -164,10 +164,24 @@ def best_predictor(user, restaurants, feature_fns):
     """
     reviewed = list(user_reviewed_restaurants(user, restaurants).values())
     "*** YOUR CODE HERE ***"
+
+    predictorlist = []
+    rsquaredlist = []
+
+    for i in range(0, len(feature_fns) - 1):
+        func = feature_fns[i]
+        predictor, rsquared = find_predictor(user, reviewed, func)
+        predictorlist.append(predictor)
+        rsquaredlist.append(rsquared)
+    maxindex = max(rsquaredlist, key=rsquaredlist.get)
+    bestpred = predictorlist[maxindex]
+
+    return bestpred
+
     result_li = []
     for feature_fn in feature_fns:
         result_li.append(find_predictor(user, reviewed, feature_fn))
-    return max(result_li, key=lambda result: result[1])[0]
+    #return max(result_li, key=lambda result: result[1])[0]
     # Uses sample-code builtin functions to 'predict' ratings, using the R2 value from user's previous ratings
 
 
@@ -182,14 +196,21 @@ def rate_all(user, restaurants, feature_functions):
     # (Note: the name RESTAURANTS is bound to a dictionary of all restaurants)
     predictor = best_predictor(user, restaurants, feature_functions)
     "*** YOUR CODE HERE ***"
-    reviewed = user_reviewed_restaurants(user, restaurants)
-    result = {}
-    for r_name, r in restaurants.items():
-        if r_name in reviewed.keys():
-            result[r_name] = review_rating(user_reviews(user)[r_name])
+
+    nameslist = []
+    ratingslist = []
+
+    for i in range(0, len(restaurants) - 1):
+        restaurantname = restaurants[i].name
+        nameslist.append(restaurantname)
+        if (restaurantname in user_reviewed_restaurants):
+            restaurantrating = user_reviewed_restaurants[restaurantname]
         else:
-            result[r_name] = predictor(r)
-    return result
+            restaurantrating = predictor(restaurantname)  # ???
+        ratingslist.append(restaurantrating)
+    ratingsdict = dict(zip(nameslist, ratingslist))
+
+    return ratingsdict
     # creates a dictionary with the ratings predicted from the user for each restaurant
 
 
@@ -200,11 +221,14 @@ def search(query, restaurants):
     restaurants -- A sequence of restaurants
     """
     "*** YOUR CODE HERE ***"
-    result = []
-    for i in range(len(restaurants) - 1, -1, -1):
-        if query not in restaurant_categories(restaurants[i]):
-            restaurants.remove(restaurants[i])
-    return restaurants
+
+    preferredrestaurants = []
+    for i in range(0, len(restaurants) - 1):
+        restaurant = restaurants[i]
+        if (restaurant_categories(restaurant) == query):
+            preferredrestaurants.append(restaurant)  # ???
+
+    return preferredrestaurants
     # Goes through list of each restaurant, and sees if the user has queried it
 
 
